@@ -7,6 +7,10 @@ struct SwiftLintBuildToolPlugin: BuildToolPlugin {
         context: PluginContext,
         target: Target
     ) throws -> [Command] {
+        guard case .root = context.package.origin else {
+            return []
+        }
+
         print("🔴 Origin:", context.package.origin)
         return try makeCommand(executable: context.tool(named: "swiftlint"),
                         swiftFiles: (target as? SourceModuleTarget).flatMap(swiftFiles) ?? [],
